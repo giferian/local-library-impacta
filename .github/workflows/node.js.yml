@@ -25,13 +25,11 @@ jobs:
     - run: npm run build --if-present
     - run: npm test --if-present
   
- 
-
- deploy-homologacao:
+  deploy-homologacao:
     runs-on: ubuntu-latest
     env:
-      DB_URI: $${{ secrets.DB_URI }}
-           
+      DB_URI: ${{ secrets.DB_URI }}
+      
     needs: [build]
     steps:
       - name: Checkout Code
@@ -52,13 +50,13 @@ jobs:
         run: heroku git:remote -a app-impacta-giferian-hom
       
       - name: Set env variables
-        run: heroku config:set MONGODB_URI=${{ env.DB_URI }}
+        run: |
+          heroku config:set MONGODB_URI=${{ env.DB_URI }}
       
       - name: Push code to Heroku
         run: git push heroku main
 
-
- deploy-producao:
+  deploy-producao:
     runs-on: ubuntu-latest
     env:
       DB_URI: $${{ secrets.DB_URI }}
@@ -90,4 +88,3 @@ jobs:
       
       - name: Push code to Heroku
         run: git push heroku main
-
